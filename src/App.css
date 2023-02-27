@@ -1,0 +1,20 @@
+.App {
+  padding: 30px;
+  display: flex;
+}
+
+.App > div {
+  margin-right: 50px;
+}
+.todolist {
+  border: 2px solid hotpink;
+  border-radius: 3px;
+  padding: 20px;
+  background-color: aqua;
+}
+.todolist-empty {
+  border: 2px solid hotpink;
+  border-radius: 3px;
+  padding: 20px;
+  background-color: darkmagenta;
+}
