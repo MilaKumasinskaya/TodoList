@@ -10,11 +10,28 @@
   border: 2px solid hotpink;
   border-radius: 3px;
   padding: 20px;
-  background-color: aqua;
+  background-color: #a1e3e3;
 }
 .todolist-empty {
   border: 2px solid hotpink;
   border-radius: 3px;
   padding: 20px;
   background-color: lightgreen;
+}
+.task {
+font-weight: bold;
+}
+.task-done {
+  font-weight: normal;
+  text-decoration: line-through;
+}
+.btn-active {
+  background-color: #5454e7;
+  color: linen;
+  border: 2px solid #1e1e76;
+  border-radius: 3px;
+}
+.input-error {
+  outline: none;
+  border: 2px solid red;
 }
