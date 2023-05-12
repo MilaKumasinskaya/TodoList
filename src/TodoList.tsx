@@ -1,19 +1,19 @@
 import React, {ChangeEvent, KeyboardEvent, FC, useRef, useState} from 'react';
 import {TaskType} from "./App";
 
-
 export type FilterValuesType = 'All' | 'Active' | 'Completed'
 
 type TodoListPropsType = {
+    todoListId: string
     title: string
     tasks: Array<TaskType>
     filter: FilterValuesType
-    removeTask: (taskID: string) => void
-    changeTodoListFilter: (filter: FilterValuesType) => void
-    changeTaskStatus: (taskID: string, newIsDone: boolean) => void
-    addTask: (title: string) => void
+    removeTask: (taskID: string, todoListId: string) => void
+    changeTodoListFilter: (filter: FilterValuesType, todoListId: string) => void
+    changeTaskStatus: (taskID: string, newIsDone: boolean, todoListId: string) => void
+    addTask: (title: string, todoListId: string) => void
+    removeTodoList: (todoListId: string) => void
 }
-
 
 const TodoList: React.FC<TodoListPropsType> = (props: TodoListPropsType) => {
 
@@ -34,8 +34,8 @@ const TodoList: React.FC<TodoListPropsType> = (props: TodoListPropsType) => {
     const maxTitleLength = 20
     const recommendedTitleLength = 10
     const todoListItems: Array<JSX.Element> = props.tasks.map((task) => {
-        const removeTaskHandler = () => props.removeTask(task.id)
-        const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked)
+        const removeTaskHandler = () => props.removeTask(task.id, props.todoListId)
+        const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked, props.todoListId)
 
         return (
             <li>
@@ -49,11 +49,12 @@ const TodoList: React.FC<TodoListPropsType> = (props: TodoListPropsType) => {
             </li>
         )
     })
+
     const isAddTaskNotPossible: boolean = title.length === 0 || title.length > maxTitleLength || error
     const addTaskHandler = () => {
         const trimmedTitle = title.trim()
         if(trimmedTitle) {
-            props.addTask(trimmedTitle)
+            props.addTask(trimmedTitle, props.todoListId)
         } else {
             setError(true)
         } setTitle('')
@@ -66,6 +67,7 @@ const TodoList: React.FC<TodoListPropsType> = (props: TodoListPropsType) => {
     const setLocalTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
         error && setError(false)
         setTitle(e.currentTarget.value)}
+    const removeTodoList = () => props.removeTodoList(props.todoListId)
     const onKeyDownAddTaskHandler = isAddTaskNotPossible
         ? undefined
         : (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addTaskHandler()
@@ -75,7 +77,10 @@ const TodoList: React.FC<TodoListPropsType> = (props: TodoListPropsType) => {
     const errorMessage = error && <div style={{color: "red"}}>Title is hard required!</div>
     return (
         <div className={todoClasses}>
-            <h3>{props.title}</h3>
+            <h3>
+                {props.title}
+                <button onClick={removeTodoList}>x</button>
+            </h3>
             <div>
                 <input
                     placeholder='enter task title'
@@ -101,19 +106,19 @@ const TodoList: React.FC<TodoListPropsType> = (props: TodoListPropsType) => {
                 <button
                     className={props.filter === 'All' ? 'btn-active': ''}
                     onClick={() => {
-                    props.changeTodoListFilter('All')
+                    props.changeTodoListFilter('All', props.todoListId)
                 }}>All
                 </button>
                 <button
                     className={props.filter === 'Active' ? 'btn-active': ''}
                     onClick={() => {
-                    props.changeTodoListFilter('Active')
+                    props.changeTodoListFilter('Active', props.todoListId)
                 }}>Active
                 </button>
                 <button
                     className={props.filter === 'Completed' ? 'btn-active': ''}
                     onClick={() => {
-                    props.changeTodoListFilter('Completed')
+                    props.changeTodoListFilter('Completed', props.todoListId)
                 }}>Completed
                 </button>
             </div>
